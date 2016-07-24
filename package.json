@@ -1,7 +1,7 @@
 {
   "name": "vue-i18n",
   "description": "Internationalization plugin for Vue.js",
-  "version": "4.0.1",
+  "version": "4.0.2",
   "author": {
     "name": "kazuya kawaguchi",
     "email": "kawakazu80@gmail.com"
@@ -57,7 +57,7 @@
     "dist/vue-i18n.common.js",
     "src"
   ],
-  "homepage": "https://github.com/kazupon/vue-i18n",
+  "homepage": "https://github.com/tsnuer/vue-i18n",
   "jsnext:main": "src/index.js",
   "keywords": [
     "i18n",
@@ -70,7 +70,7 @@
   "main": "dist/vue-i18n.common.js",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/kazupon/vue-i18n.git"
+    "url": "git+https://github.com/tsnuer/vue-i18n.git"
   },
   "scripts": {
     "browser": "VUE_I18N_TYPE=browser karma start config/karma.conf.js",

@@ -5,7 +5,7 @@ import { getValue } from './path'
 
 /**
  * extend
- * 
+ *
  * @param {Vue} Vue
  * @return {Vue}
  */
@@ -23,7 +23,7 @@ export default function (Vue) {
   function warnDefault (key, defaultValue) {
     if (process.env.NODE_ENV !== 'production' && defaultValue === null) {
       warn('Cannot translate the value of keypath "' + key + '". '
-        + 'Use the value of keypath as default')
+           + 'Use the value of keypath as default')
     }
 
     if (defaultValue !== null) {
@@ -34,13 +34,13 @@ export default function (Vue) {
   }
 
 
-  /**
-   * Vue.t
-   *
-   * @param {String} key
-   * @param {Array} ...args
-   * @return {String}
-   */
+    /**
+  * Vue.t
+  *
+  * @param {String} key
+  * @param {Object} options
+  * @return {String}
+  */
 
   Vue.t = (key, options) => {
     if (!key) { return '' }
@@ -54,13 +54,13 @@ export default function (Vue) {
   }
 
 
-  /**
-   * $t
-   *
-   * @param {String} key
-   * @param {Array} ...args
-   * @return {String}
-   */
+    /**
+  * $t
+  *
+  * @param {String} key
+  * @param {Object} options
+  * @return {String}
+  */
 
   Vue.prototype.$t = function (key, options) {
     if (!key) { return '' }

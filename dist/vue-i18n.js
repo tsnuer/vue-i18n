@@ -1,5 +1,5 @@
 /*!
- * vue-i18n v4.0.1
+ * vue-i18n v4.0.2
  * (c) 2016 kazuya kawaguchi
  * Released under the MIT License.
  */
@@ -705,41 +705,12 @@
 
   /**
    * extend
-   * 
+   *
    * @param {Vue} Vue
    * @return {Vue}
    */
 
   function Extend (Vue) {
-    var _Vue$util = Vue.util;
-    var isArray = _Vue$util.isArray;
-    var isObject = _Vue$util.isObject;
-
-
-    function parseArgs() {
-      for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
-        args[_key] = arguments[_key];
-      }
-
-      var lang = Vue.config.lang;
-      if (args.length === 1) {
-        if (isObject(args[0]) || isArray(args[0])) {
-          args = args[0];
-        } else if (typeof args[0] === 'string') {
-          lang = args[0];
-        }
-      } else if (args.length === 2) {
-        if (typeof args[0] === 'string') {
-          lang = args[0];
-        }
-        if (isObject(args[1]) || isArray(args[1])) {
-          args = args[1];
-        }
-      }
-
-      return { lang: lang, params: args };
-    }
-
     function translate(locale, key, args) {
       if (!locale) {
         return null;
@@ -753,61 +724,58 @@
       return args ? format(val, args) : val;
     }
 
-    function warnDefault(key) {
-      if ('development' !== 'production') {
+    function warnDefault(key, defaultValue) {
+      if ('development' !== 'production' && defaultValue === null) {
         warn('Cannot translate the value of keypath "' + key + '". ' + 'Use the value of keypath as default');
       }
+
+      if (defaultValue !== null) {
+        key = defaultValue;
+      }
+
       return key;
     }
 
     /**
-     * Vue.t
-     *
-     * @param {String} key
-     * @param {Array} ...args
-     * @return {String}
-     */
+    * Vue.t
+    *
+    * @param {String} key
+    * @param {Object} options
+    * @return {String}
+    */
 
-    Vue.t = function (key) {
-      for (var _len2 = arguments.length, args = Array(_len2 > 1 ? _len2 - 1 : 0), _key2 = 1; _key2 < _len2; _key2++) {
-        args[_key2 - 1] = arguments[_key2];
-      }
-
+    Vue.t = function (key, options) {
       if (!key) {
         return '';
       }
 
-      var _parseArgs = parseArgs.apply(undefined, args);
+      var transOptions = options || {};
+      var params = transOptions.params || undefined;
+      var lang = transOptions.lang || Vue.config.lang;
+      var defaultValue = transOptions.defaultValue || null;
 
-      var lang = _parseArgs.lang;
-      var params = _parseArgs.params;
-
-      return translate(Vue.locale(lang), key, params) || warnDefault(key);
+      return translate(Vue.locale(lang), key, params) || warnDefault(key, defaultValue);
     };
 
     /**
-     * $t
-     *
-     * @param {String} key
-     * @param {Array} ...args
-     * @return {String}
-     */
+    * $t
+    *
+    * @param {String} key
+    * @param {Object} options
+    * @return {String}
+    */
 
-    Vue.prototype.$t = function (key) {
+    Vue.prototype.$t = function (key, options) {
       if (!key) {
         return '';
       }
 
-      for (var _len3 = arguments.length, args = Array(_len3 > 1 ? _len3 - 1 : 0), _key3 = 1; _key3 < _len3; _key3++) {
-        args[_key3 - 1] = arguments[_key3];
-      }
+      var transOptions = options || {};
+      var params = transOptions.params || undefined;
+      var lang = transOptions.lang || Vue.config.lang;
+      var defaultValue = transOptions.defaultValue || null;
 
-      var _parseArgs2 = parseArgs.apply(undefined, args);
-
-      var lang = _parseArgs2.lang;
-      var params = _parseArgs2.params;
-
-      return translate(this.$options.locales && this.$options.locales[lang], key, params) || translate(Vue.locale(lang), key, params) || warnDefault(key);
+      return translate(this.$options.locales && this.$options.locales[lang], key, params) || translate(Vue.locale(lang), key, params) || warnDefault(key, defaultValue);
     };
 
     return Vue;
@@ -857,7 +825,7 @@
     Vue.config.silent = silent;
   }
 
-  plugin.version = '4.0.1';
+  plugin.version = '4.0.2';
 
   if (typeof window !== 'undefined' && window.Vue) {
     window.Vue.use(plugin);
