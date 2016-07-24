@@ -11,28 +11,6 @@ import { getValue } from './path'
  */
 
 export default function (Vue) {
-  const { isArray, isObject } = Vue.util
-
-  function parseArgs (...args) {
-    let lang = Vue.config.lang
-    if (args.length === 1) {
-      if (isObject(args[0]) || isArray(args[0])) {
-        args = args[0]
-      } else if (typeof args[0] === 'string') {
-        lang = args[0]
-      }
-    } else if (args.length === 2) {
-      if (typeof args[0] === 'string') {
-        lang = args[0]
-      }
-      if (isObject(args[1]) || isArray(args[1])) {
-        args = args[1]
-      }
-    }
-
-    return { lang, params: args }
-  }
-
   function translate (locale, key, args) {
     if (!locale) { return null }
 
@@ -42,11 +20,16 @@ export default function (Vue) {
     return args ? format(val, args) : val
   }
 
-  function warnDefault (key) {
-    if (process.env.NODE_ENV !== 'production') {
+  function warnDefault (key, defaultValue) {
+    if (process.env.NODE_ENV !== 'production' && defaultValue === null) {
       warn('Cannot translate the value of keypath "' + key + '". '
         + 'Use the value of keypath as default')
     }
+
+    if (defaultValue !== null) {
+      key = defaultValue
+    }
+
     return key
   }
 
@@ -59,11 +42,15 @@ export default function (Vue) {
    * @return {String}
    */
 
-  Vue.t = (key, ...args) => {
+  Vue.t = (key, options) => {
     if (!key) { return '' }
 
-    const { lang, params } = parseArgs(...args)
-    return translate(Vue.locale(lang), key, params) || warnDefault(key)
+    const transOptions = options || {}
+    const params = transOptions.params || undefined
+    const lang = transOptions.lang || Vue.config.lang
+    const defaultValue = transOptions.defaultValue || null
+
+    return translate(Vue.locale(lang), key, params) || warnDefault(key, defaultValue)
   }
 
 
@@ -75,14 +62,19 @@ export default function (Vue) {
    * @return {String}
    */
 
-  Vue.prototype.$t = function (key, ...args) {
+  Vue.prototype.$t = function (key, options) {
     if (!key) { return '' }
 
-    const { lang, params } = parseArgs(...args)
-    return translate(this.$options.locales && this.$options.locales[lang], key, params) 
+    const transOptions = options || {}
+    const params = transOptions.params || undefined
+    const lang = transOptions.lang || Vue.config.lang
+    const defaultValue = transOptions.defaultValue || null
+
+    return translate(this.$options.locales && this.$options.locales[lang], key, params)
       || translate(Vue.locale(lang), key, params)
-      || warnDefault(key)
+      || warnDefault(key, defaultValue)
   }
 
   return Vue
 }
+

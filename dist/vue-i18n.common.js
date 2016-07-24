@@ -5,14 +5,6 @@
  */
 'use strict';
 
-var babelHelpers = {};
-babelHelpers.typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) {
-  return typeof obj;
-} : function (obj) {
-  return obj && typeof Symbol === "function" && obj.constructor === Symbol ? "symbol" : typeof obj;
-};
-babelHelpers;
-
 /**
  * Utilties
  */
@@ -496,7 +488,14 @@ function compare (v1, v2) {
   return 0;
 }
 
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) {
+  return typeof obj;
+} : function (obj) {
+  return obj && typeof Symbol === "function" && obj.constructor === Symbol ? "symbol" : typeof obj;
+};
+
 var locales = Object.create(null); // locales store
+
 
 function Asset (Vue) {
   /**
@@ -533,7 +532,7 @@ function Asset (Vue) {
 function setLocale(id, definition, cb) {
   var _this = this;
 
-  if ((typeof definition === 'undefined' ? 'undefined' : babelHelpers.typeof(definition)) === 'object') {
+  if ((typeof definition === 'undefined' ? 'undefined' : _typeof(definition)) === 'object') {
     // sync
     cb(definition);
   } else {
@@ -676,7 +675,7 @@ function format (string) {
     args[_key - 1] = arguments[_key];
   }
 
-  if (args.length === 1 && babelHelpers.typeof(args[0]) === 'object') {
+  if (args.length === 1 && _typeof(args[0]) === 'object') {
     args = args[0];
   }
 
@@ -811,6 +810,7 @@ function Extend (Vue) {
 }
 
 var langVM = void 0; // singleton
+
 
 /**
  * plugin

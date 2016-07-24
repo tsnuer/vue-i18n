@@ -18,7 +18,7 @@ describe('issues', () => {
 
   describe('#35', () => {
     it('should be translated', () => {
-      assert(vm.$t('underscore', { hello_msg: 'hello' }) === 'hello world')
+      assert(vm.$t('underscore', { params: { hello_msg: 'hello' } }) === 'hello world')
     })
   })
 })
