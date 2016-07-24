@@ -22,7 +22,7 @@ describe('i18n', () => {
 
     describe('ja language locale', () => {
       it('should translate a japanese', () => {
-        assert(Vue.t('message.hello', 'ja') === locales.ja.message.hello)
+        assert(Vue.t('message.hello', { lang: 'ja' }) === locales.ja.message.hello)
       })
     })
 
@@ -51,8 +51,8 @@ describe('i18n', () => {
         })
 
         it('should return replaced string if available', () => {
-          assert(
-            Vue.t('Hello {0}', ['kazupon']),
+          assert.equal(
+            Vue.t('Hello {0}', { params: ['kazupon'] }),
             'Hello kazupon'
           )
         })
@@ -66,8 +66,8 @@ describe('i18n', () => {
     describe('format arguments', () => {
       context('named', () => {
         it('should return replaced string', () => {
-          assert(
-            Vue.t('message.format.named', { name: 'kazupon' }),
+          assert.equal(
+            Vue.t('message.format.named', { params: { name: 'kazupon' } }),
             'Hello kazupon, how are you?'
           )
         })
@@ -75,8 +75,8 @@ describe('i18n', () => {
 
       context('list', () => {
         it('should return replaced string', () => {
-          assert(
-            Vue.t('message.format.list', ['kazupon']),
+          assert.equal(
+            Vue.t('message.format.list', { params: ['kazupon'] }),
             'Hello kazupon, how are you?'
           )
         })
@@ -85,14 +85,14 @@ describe('i18n', () => {
 
     describe('language argument', () => {
       it('should return empty string', () => {
-        assert(Vue.t('message.hello', 'ja') === locales.ja.message.hello)
+        assert(Vue.t('message.hello', { lang: 'ja' }) === locales.ja.message.hello)
       })
     })
 
     describe('format & language arguments', () => {
       it('should return replaced string', () => {
-        assert(
-          Vue.t('message.format.list', 'ja', ['kazupon']),
+        assert.equal(
+          Vue.t('message.format.list', { lang: 'ja', params: ['kazupon'] }),
           'こんにちは kazupon, ごきげんいかが？'
         )
       })
@@ -111,7 +111,7 @@ describe('i18n', () => {
     describe('ja language locale', () => {
       it('should translate a japanese', () => {
         const vm = new Vue()
-        assert(vm.$t('message.hello', 'ja') === locales.ja.message.hello)
+        assert(vm.$t('message.hello', { lang: 'ja' }) === locales.ja.message.hello)
       })
     })
 
@@ -145,8 +145,8 @@ describe('i18n', () => {
 
         it('should return replaced string if available', () => {
           const vm = new Vue()
-          assert(
-            vm.$t('Hello {0}', ['kazupon']),
+          assert.equal(
+            vm.$t('Hello {0}', { params: ['kazupon'] }),
             'Hello kazupon'
           )
         })
@@ -162,8 +162,8 @@ describe('i18n', () => {
       context('named', () => {
         it('should return replaced string', () => {
           const vm = new Vue()
-          assert(
-            vm.$t('message.format.named', { name: 'kazupon' }),
+          assert.equal(
+            vm.$t('message.format.named', { params: { name: 'kazupon' } }),
             'Hello kazupon, how are you?'
           )
         })
@@ -172,8 +172,8 @@ describe('i18n', () => {
       context('list', () => {
         it('should return replaced string', () => {
           const vm = new Vue()
-          assert(
-            vm.$t('message.format.list', ['kazupon']),
+          assert.equal(
+            vm.$t('message.format.list', { params: ['kazupon'] }),
             'Hello kazupon, how are you?'
           )
         })
@@ -183,15 +183,15 @@ describe('i18n', () => {
     describe('language argument', () => {
       it('should return empty string', () => {
         const vm = new Vue()
-        assert(vm.$t('message.hello', 'ja') === locales.ja.message.hello)
+        assert(vm.$t('message.hello', { lang: 'ja' }) === locales.ja.message.hello)
       })
     })
 
     describe('format & language arguments', () => {
       it('should return replaced string', () => {
         const vm = new Vue()
-        assert(
-          vm.$t('message.format.list', 'ja', ['kazupon']),
+        assert.equal(
+          vm.$t('message.format.list', { lang: 'ja', params: ['kazupon'] }),
           'こんにちは kazupon, ごきげんいかが？'
         )
       })
@@ -213,10 +213,10 @@ describe('i18n', () => {
       }
 
       if (compare(Vue.version, '2.0.0-alpha') < 0) {
-        options.template = '<p>{{ $t("message.hello", lang) }}</p>'
+        options.template = '<p>{{ $t("message.hello", { lang: lang }) }}</p>'
       } else {
         options.render = function () {
-          return this.$createElement('p', {}, [this.__toString__(this.$t('message.hello', this.lang))])
+          return this.$createElement('p', {}, [this.__toString__(this.$t('message.hello', { lang: this.lang }))])
         }
       }
 
